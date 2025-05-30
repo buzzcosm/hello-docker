@@ -39,6 +39,15 @@ The application will be available at http://localhost:8080
 
 ## Docker Containerization Options
 
+| # | Dockerfile | Image Size |
+|---|------------|------------|
+| 1 | Dockerfile_jar_simple | ~637 MB |
+| 2 | Dockerfile_jar_stages | ~332 MB |
+| 3 | Dockerfile_native | ~177 MB |
+| 4 | Dockerfile_native_oracle | ~177 MB |
+| 5 | Dockerfile_native_oracle_tiny | ~100 MB |
+| 6 | Dockerfile_native_upx | ~37 MB |
+
 ### 1. Simple JAR-based Image
 
 This approach packages the application as a JAR file and runs it on a JVM.
