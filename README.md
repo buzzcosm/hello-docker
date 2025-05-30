@@ -14,7 +14,7 @@ The application itself is a minimal REST API with a single endpoint:
 
 ## Prerequisites
 
-- Java 21 (OpenJDK 21.0.4 recommended, see `.java-version`)
+- Java 21
 - Docker
 - Docker Compose
 - Maven 3.9+ (or use the included Maven wrapper)
