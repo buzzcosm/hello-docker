@@ -137,15 +137,3 @@ docker compose up -d
 ```
 
 Image size: ~37 MB
-
-## Technologies Used
-
-- Spring Boot 3.5.0
-- Java 21
-- Docker-Image with GraalVM
-- Docker
-- Maven
-
-## License
-
-[MIT License](LICENSE)
