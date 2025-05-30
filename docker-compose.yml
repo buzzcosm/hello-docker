@@ -3,5 +3,8 @@ name: 'hello-docker'
 services:
   api:
     image: 'hello-docker:latest'
-    ports:
-      - '8080:8080'
+    container_name: api
+    stdin_open: true   # = -i
+    tty: true          # = -t
+#    ports:
+#      - '8080:8080'
