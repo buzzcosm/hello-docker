@@ -9,11 +9,12 @@ This project showcases how to containerize a Spring Boot application using diffe
 - Multi-stage builds for optimized images
 - GraalVM native image compilation for smaller footprint and faster startup
 
-The application itself is a minimal REST API that returns a greeting message.
+The application itself is a minimal REST API with a single endpoint:
+- `GET /` - Returns the greeting message "Hello Docker 👋"
 
 ## Prerequisites
 
-- Java 21
+- Java 21 (OpenJDK 21.0.4 recommended, see `.java-version`)
 - Docker
 - Docker Compose
 - Maven 3.9+ (or use the included Maven wrapper)
@@ -70,6 +71,8 @@ docker build -f Dockerfiles/Dockerfile_jar_stages -t hello-docker:latest .
 docker compose up -d
 ```
 
+Image size: ~332 MB
+
 ### 3. GraalVM Native Image
 
 Compiles the application to a native executable for faster startup and lower memory usage.
@@ -96,6 +99,8 @@ docker build -f Dockerfiles/Dockerfile_native_oracle -t hello-docker:latest .
 docker compose up -d
 ```
 
+Image size: ~177 MB
+
 ### 5. Oracle GraalVM Native Image (Tiny)
 
 The most optimized version using Oracle's GraalVM and a minimal base image.
@@ -108,34 +113,29 @@ docker build -f Dockerfiles/Dockerfile_native_oracle_tiny -t hello-docker:latest
 docker compose up -d
 ```
 
-## Project Structure
+Image size: ~100 MB
 
-- `src/main/java` - Java source code
-- `src/main/resources` - Application configuration
-- `Dockerfiles/` - Various Dockerfile implementations
-- `docker-compose.yml` - Docker Compose configuration
+### 6. UPX-compressed Native Image
+
+The smallest possible image using Oracle's GraalVM with UPX compression for extreme size reduction.
+
+```bash
+# Build the image
+docker build -f Dockerfiles/Dockerfile_native_upx -t hello-docker:latest .
+
+# Run with Docker Compose
+docker compose up -d
+```
+
+Image size: ~37 MB
 
 ## Technologies Used
 
 - Spring Boot 3.5.0
 - Java 21
-- GraalVM
+- Docker-Image with GraalVM
 - Docker
 - Maven
-
-## Development
-
-### Running Tests
-
-```bash
-./mvnw test
-```
-
-### Building Native Image Locally
-
-```bash
-./mvnw native:compile -Pnative
-```
 
 ## License
 
