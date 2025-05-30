@@ -1,12 +1,14 @@
 # ######################
 # IMAGE-SIZE: 332.3 MB #
 # ######################
-#
+
+# #######################################################################################
 # docker build -f Dockerfiles/Dockerfile_jar_stages -t hello-docker:latest .
 # docker compose up -d
 # curl http://localhost:8080
 # docker compose down -v
-#
+# #######################################################################################
+
 # --- STAGE 1: Build image ---
 FROM maven:3.9.9-amazoncorretto-21-debian-bookworm AS build
 
