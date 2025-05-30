@@ -1,0 +1,7 @@
+name: 'hello-docker'
+
+services:
+  api:
+    image: 'hello-docker:latest'
+    ports:
+      - '8080:8080'
