@@ -1,0 +1,33 @@
+# #######################
+# IMAGE-SIZE: 101.54 MB #
+# #######################
+#
+# docker build -f Dockerfiles/Dockerfile_native_oracle_tiny -t hello-docker:latest .
+# docker compose up -d
+# curl http://localhost:8080
+# docker compose down -v
+#
+# --- STAGE 1: Build native image ---
+FROM container-registry.oracle.com/graalvm/native-image:21 AS native-build
+
+WORKDIR /build
+
+# Maven Wrapper + Dependencies
+COPY mvnw .
+COPY .mvn/ .mvn/
+COPY pom.xml .
+RUN ./mvnw dependency:go-offline
+
+# Source Code
+COPY src/ src/
+
+# Build native binary
+RUN ./mvnw native:compile -Pnative -DskipTests
+
+# --- STAGE 2: Final minimal image ---
+FROM frolvlad/alpine-glibc
+# /usr/local/bin
+# If you only have one binary (such as hello-docker) that should be available system-wide.
+# Advantage: Is in the PATH, can be executed without specifying a path.
+COPY --from=native-build /build/target/hello-docker /usr/local/bin/app
+CMD ["app"]
