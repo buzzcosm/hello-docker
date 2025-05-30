@@ -1,0 +1,43 @@
+# #######################################################################################
+# docker build -f Dockerfiles/Dockerfile_native_upx -t hello-docker:latest .
+# docker compose up -d
+# curl http://localhost:8080
+# docker compose down -v
+# #######################################################################################
+# --- STAGE 1: Build native image ---
+FROM container-registry.oracle.com/graalvm/native-image:21 AS native-build
+
+WORKDIR /build
+
+# Maven Wrapper + Dependencies
+COPY mvnw .
+COPY .mvn/ .mvn/
+COPY pom.xml .
+RUN ./mvnw dependency:go-offline
+
+# Source Code
+COPY src/ src/
+
+# Build native binary
+RUN ./mvnw native:compile -Pnative -DskipTests
+
+# --- STAGE 2: UPX compression ---
+FROM frolvlad/alpine-glibc AS compress-stage
+
+RUN apk add --no-cache upx
+
+WORKDIR /compress
+
+# Copy binary from native-build
+COPY --from=native-build /build/target/hello-docker .
+
+# Compress binary
+RUN upx --best --lzma hello-docker
+
+# --- STAGE 3: Final minimal image ---
+FROM frolvlad/alpine-glibc
+
+WORKDIR /opt/app
+COPY --from=compress-stage /compress/hello-docker .
+
+CMD ["./hello-docker"]
