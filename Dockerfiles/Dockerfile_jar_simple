@@ -2,7 +2,7 @@
 # IMAGE-SIZE: 637.23 MB #
 # #######################
 #
-# docker build -f Dockerfiles/Dockerfile_simple -t hello-docker:latest .
+# docker build -f Dockerfiles/Dockerfile_jar_simple -t hello-docker:latest .
 # docker compose up -d
 # curl http://localhost:8080
 # docker compose down -v
