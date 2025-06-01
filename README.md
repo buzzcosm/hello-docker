@@ -37,7 +37,7 @@ java -jar target/hello-docker.jar
 
 The application will be available at http://localhost:8080
 
-## Docker Containerization Options
+## 🐳 Docker Containerization Options
 
 | # | Dockerfile | Image Size |
 |---|------------|------------|
@@ -48,7 +48,7 @@ The application will be available at http://localhost:8080
 | 5 | Dockerfile_native_oracle_tiny | ~100 MB |
 | 6 | Dockerfile_native_upx | ~37 MB |
 
-### 1. Simple JAR-based Image
+### 1. 🧱 Simple JAR-based Image
 
 This approach packages the application as a JAR file and runs it on a JVM.
 
@@ -68,7 +68,7 @@ docker compose down -v
 
 Image size: ~637 MB
 
-### 2. Multi-stage JAR-based Image
+### 2. 🧱🔧 Multi-stage JAR-based Image
 
 A more optimized approach using multi-stage builds.
 
@@ -82,7 +82,7 @@ docker compose up -d
 
 Image size: ~332 MB
 
-### 3. GraalVM Native Image
+### 3. ⚡ GraalVM Native Image
 
 Compiles the application to a native executable for faster startup and lower memory usage.
 
@@ -96,7 +96,7 @@ docker compose up -d
 
 Image size: ~177 MB
 
-### 4. Oracle GraalVM Native Image
+### 4. ⚡🏛️ Oracle GraalVM Native Image
 
 Uses Oracle's GraalVM distribution for native image compilation.
 
@@ -110,7 +110,7 @@ docker compose up -d
 
 Image size: ~177 MB
 
-### 5. Oracle GraalVM Native Image (Tiny)
+### 5. ⚡📦 Oracle GraalVM Native Image (Tiny)
 
 The most optimized version using Oracle's GraalVM and a minimal base image.
 
@@ -124,7 +124,7 @@ docker compose up -d
 
 Image size: ~100 MB
 
-### 6. UPX-compressed Native Image
+### 6. ⚡🪶 UPX-compressed Native Image
 
 The smallest possible image using Oracle's GraalVM with UPX compression for extreme size reduction.
 
@@ -138,7 +138,7 @@ docker compose up -d
 
 Image size: ~37 MB
 
-## Dockerfile commands
+## 🐳🔧 Dockerfile commands
 
 * FROM initializes the build stage and defines the base image to build on.
 * WORKDIR sets the working directory for any RUN, CMD, ENTRYPOINT, COPY, and ADD directives that follow in the Dockerfile.
@@ -147,3 +147,18 @@ Image size: ~37 MB
 * EXPOSE configures Docker to open a specific network port for listening on the container, in this case port 8080.
 * ENV sets environment variables.
 * CMD provides the default execution command when the container is run.
+
+## 🧪 Automated Build & Test Script
+To automatically build the image, start the container, verify the response, and clean up everything:
+
+```shell
+./scripts/test_build_and_run.sh
+```
+
+This script will:
+- Check if Docker is running
+- Automatically build the image if it’s missing
+- Start the container using Docker Compose
+- Test the HTTP response for the string Hello Docker
+- Print the result
+- Stop and remove the container afterward
