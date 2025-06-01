@@ -5,6 +5,7 @@ target/
 
 ### Artifacts ###
 .java-version
+.DS_Store
 
 ### STS ###
 .apt_generated
