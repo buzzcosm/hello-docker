@@ -3,7 +3,9 @@
 # ######################
 
 # #######################################################################################
-# docker build -f Dockerfiles/Dockerfile_native_upx -t hello-docker:latest .
+# $ docker build -t hello-docker:latest -f Dockerfiles/Dockerfile_native_upx .
+# (optional)$ docker rmi $(docker images -f "dangling=true" -q)
+# (optional)$ docker build --no-cache -t hello-docker:latest -f Dockerfiles/Dockerfile_native_upx .
 # docker compose up -d
 # curl http://localhost:8080
 # docker compose down -v
