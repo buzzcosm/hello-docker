@@ -136,4 +136,14 @@ docker build -f Dockerfiles/Dockerfile_native_upx -t hello-docker:latest .
 docker compose up -d
 ```
 
+## Dockerfile commands
+
+* FROM initializes the build stage and defines the base image to build on.
+* WORKDIR sets the working directory for any RUN, CMD, ENTRYPOINT, COPY, and ADD directives that follow in the Dockerfile.
+* COPY copies new files or directories into the Docker image.
+* RUN executes commands on top of the current image as a new layer and commits the results.
+* EXPOSE configures Docker to open a specific network port for listening on the container, in this case port 8080.
+* ENV sets environment variables.
+* CMD provides the default execution command when the container is run.
+
 Image size: ~37 MB
