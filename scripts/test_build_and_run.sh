@@ -7,10 +7,24 @@
 
 set -e
 
+IMAGE_NAME="hello-docker"
+
 echo "🔍 Checking if Docker daemon is running..."
 if ! docker info > /dev/null 2>&1; then
   echo "❌ Docker daemon is not running. Please start Docker and try again."
   exit 1
+fi
+
+echo "🔎 Checking if Docker image '$IMAGE_NAME' exists..."
+if ! docker image inspect "$IMAGE_NAME" > /dev/null 2>&1; then
+  echo "⚠️ Docker image '$IMAGE_NAME' not found. Trying to build it using ./scripts/build_and_clean.sh..."
+  if [ -f ./scripts/build_and_clean.sh ]; then
+    chmod +x ./scripts/build_and_clean.sh
+    ./scripts/build_and_clean.sh
+  else
+    echo "❌ Build script './scripts/build_and_clean.sh' not found. Cannot proceed."
+    exit 1
+  fi
 fi
 
 echo "🚀 Starting container with Docker Compose..."
