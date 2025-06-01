@@ -136,6 +136,8 @@ docker build -f Dockerfiles/Dockerfile_native_upx -t hello-docker:latest .
 docker compose up -d
 ```
 
+Image size: ~37 MB
+
 ## Dockerfile commands
 
 * FROM initializes the build stage and defines the base image to build on.
@@ -145,5 +147,3 @@ docker compose up -d
 * EXPOSE configures Docker to open a specific network port for listening on the container, in this case port 8080.
 * ENV sets environment variables.
 * CMD provides the default execution command when the container is run.
-
-Image size: ~37 MB
