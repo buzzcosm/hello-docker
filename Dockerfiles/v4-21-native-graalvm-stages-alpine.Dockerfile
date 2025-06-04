@@ -1,16 +1,6 @@
-# #######################
-# IMAGE-SIZE: 101.54 MB #
-# #######################
-
-# #######################################################################################
-# docker build -f Dockerfiles/Dockerfile_native_oracle_tiny -t hello-docker:latest .
-# docker compose up -d
-# curl http://localhost:8080
-# docker compose down -v
-# #######################################################################################
-
 # --- STAGE 1: Build native image ---
-FROM container-registry.oracle.com/graalvm/native-image:21 AS native-build
+#FROM container-registry.oracle.com/graalvm/native-image:21 AS native-build
+FROM mvkvl/graalvm:native-image-community-21-maven-3.9.6 AS native-build
 
 WORKDIR /build
 

@@ -2,7 +2,7 @@ name: 'hello-docker'
 
 services:
   api:
-    image: 'hello-docker'
+    image: "hello-docker:${IMAGE_TAG:-latest}"
     container_name: api
     ports:
       - '8080:8080'

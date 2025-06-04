@@ -1,34 +1,38 @@
 #!/bin/bash
 
-# chmod +x scripts/test_build_and_run.sh
-# ./scripts/test_build_and_run.sh
-# Script: test_build_and_run.sh
-# Purpose: Build image, run container, verify output, and clean up.
-
 set -e
 
-IMAGE_NAME="hello-docker"
+if [ -z "$REVISION" ]; then
+  echo "❌ REVISION variable not set. Please set it before calling this script."
+  exit 1
+fi
+
+IMAGE_NAME="hello-docker:$REVISION"
+DOCKERFILE="Dockerfiles/$REVISION.Dockerfile"
 
 echo "🔍 Checking if Docker daemon is running..."
-if ! docker info > /dev/null 2>&1; then
+if docker info > /dev/null 2>&1; then
+  echo "✅ Docker daemon is running."
+else
   echo "❌ Docker daemon is not running. Please start Docker and try again."
   exit 1
 fi
 
-echo "🔎 Checking if Docker image '$IMAGE_NAME' exists..."
-if ! docker image inspect "$IMAGE_NAME" > /dev/null 2>&1; then
-  echo "⚠️ Docker image '$IMAGE_NAME' not found. Trying to build it using ./scripts/build_and_clean.sh..."
-  if [ -f ./scripts/build_and_clean.sh ]; then
-    chmod +x ./scripts/build_and_clean.sh
-    ./scripts/build_and_clean.sh
-  else
-    echo "❌ Build script './scripts/build_and_clean.sh' not found. Cannot proceed."
-    exit 1
-  fi
+echo "🔨 Building Docker image: $IMAGE_NAME"
+docker build -t "$IMAGE_NAME" -f "$DOCKERFILE" .
+
+echo "🧹 Cleaning up dangling images..."
+dangling=$(docker images -f "dangling=true" -q)
+
+if [ -n "$dangling" ]; then
+  echo "Removing dangling images..."
+  docker rmi "$dangling"
+else
+  echo "No dangling images to remove."
 fi
 
 echo "🚀 Starting container with Docker Compose..."
-docker compose up -d
+IMAGE_TAG="$REVISION" docker compose up -d
 
 echo "⏳ Waiting until container is running..."
 CONTAINER_NAME="api"
@@ -70,4 +74,5 @@ fi
 
 echo "🧹 Stopping and removing container..."
 docker compose down -v
-echo "✅ Cleanup complete."
+
+echo "✅ Done."

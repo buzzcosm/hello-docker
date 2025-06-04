@@ -37,106 +37,9 @@ java -jar target/hello-docker.jar
 
 The application will be available at http://localhost:8080
 
-## 🐳 Docker Containerization Options
+## 🐳 Docker Containerization Benchmark
 
-| # | Dockerfile | Image Size |
-|---|------------|------------|
-| 1 | Dockerfile_jar_simple | ~637 MB |
-| 2 | Dockerfile_jar_stages | ~332 MB |
-| 3 | Dockerfile_native | ~177 MB |
-| 4 | Dockerfile_native_oracle | ~177 MB |
-| 5 | Dockerfile_native_oracle_tiny | ~100 MB |
-| 6 | Dockerfile_native_upx | ~37 MB |
-
-### 1. 🧱 Simple JAR-based Image
-
-This approach packages the application as a JAR file and runs it on a JVM.
-
-```bash
-# Build the image
-docker build -f Dockerfiles/Dockerfile_jar_simple -t hello-docker:latest .
-
-# Run with Docker Compose
-docker compose up -d
-
-# Test the application
-curl http://localhost:8080
-
-# Stop the container
-docker compose down -v
-```
-
-Image size: ~637 MB
-
-### 2. 🧱🔧 Multi-stage JAR-based Image
-
-A more optimized approach using multi-stage builds.
-
-```bash
-# Build the image
-docker build -f Dockerfiles/Dockerfile_jar_stages -t hello-docker:latest .
-
-# Run with Docker Compose
-docker compose up -d
-```
-
-Image size: ~332 MB
-
-### 3. ⚡ GraalVM Native Image
-
-Compiles the application to a native executable for faster startup and lower memory usage.
-
-```bash
-# Build the image
-docker build -f Dockerfiles/Dockerfile_native -t hello-docker:latest .
-
-# Run with Docker Compose
-docker compose up -d
-```
-
-Image size: ~177 MB
-
-### 4. ⚡🏛️ Oracle GraalVM Native Image
-
-Uses Oracle's GraalVM distribution for native image compilation.
-
-```bash
-# Build the image
-docker build -f Dockerfiles/Dockerfile_native_oracle -t hello-docker:latest .
-
-# Run with Docker Compose
-docker compose up -d
-```
-
-Image size: ~177 MB
-
-### 5. ⚡📦 Oracle GraalVM Native Image (Tiny)
-
-The most optimized version using Oracle's GraalVM and a minimal base image.
-
-```bash
-# Build the image
-docker build -f Dockerfiles/Dockerfile_native_oracle_tiny -t hello-docker:latest .
-
-# Run with Docker Compose
-docker compose up -d
-```
-
-Image size: ~100 MB
-
-### 6. ⚡🪶 UPX-compressed Native Image
-
-The smallest possible image using Oracle's GraalVM with UPX compression for extreme size reduction.
-
-```bash
-# Build the image
-docker build -f Dockerfiles/Dockerfile_native_upx -t hello-docker:latest .
-
-# Run with Docker Compose
-docker compose up -d
-```
-
-Image size: ~37 MB
+![Docker Containerization Benchmark](./docs/pictures/docker-containerization-benchmark.png)
 
 ## 🐳🔧 Dockerfile commands
 
@@ -148,17 +51,42 @@ Image size: ~37 MB
 * ENV sets environment variables.
 * CMD provides the default execution command when the container is run.
 
-## 🧪 Automated Build & Test Script
-To automatically build the image, start the container, verify the response, and clean up everything:
+## 🧪 Automated Build & Test Scripts
 
-```shell
-./scripts/test_build_and_run.sh
-```
+**s.** *directory*: `scripts/build_and_test_image_v*.sh`
 
 This script will:
 - Check if Docker is running
-- Automatically build the image if it’s missing
-- Start the container using Docker Compose
+- Automatically build the image
+- Start the container using docker-compose.yml
 - Test the HTTP response for the string Hello Docker
 - Print the result
 - Stop and remove the container afterward
+
+## 🧩(optional) Java containers with Jib
+
+- [Building Java containers with Jib](https://cloud.google.com/java/getting-started/jib)
+
+Helper - Get Digest if image:
+
+> `docker inspect <image>:<tag> --format='{{index .RepoDigests 0}}'`
+
+### Build Docker Image
+
+```shell
+./mvnw clean compile jib:dockerBuild
+```
+
+### Test
+
+```shell
+docker run --platform linux/amd64 -it --rm -p 8080:8080 --name hello-docker-jib hello-docker:jib  
+```
+
+## 🧩(optional) Spring-Boot Container
+
+- [Packaging OCI Images](https://docs.spring.io/spring-boot/maven-plugin/build-image.html)
+
+```shell
+./mvnw spring-boot:build-image -Dspring-boot.build-image.imageName=hello-docker:spring-boot-build
+```

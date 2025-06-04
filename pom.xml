@@ -18,6 +18,7 @@
 
 	<properties>
 		<java.version>21</java.version>
+		<jib-maven-plugin.version>3.4.5</jib-maven-plugin.version>
 	</properties>
 
 	<dependencies>
@@ -39,8 +40,7 @@
 	</dependencies>
 
 	<build>
-		<finalName>${artifactId}</finalName>
-
+		<finalName>${project.artifactId}</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -58,6 +58,50 @@
 			<plugin>
 				<groupId>org.graalvm.buildtools</groupId>
 				<artifactId>native-maven-plugin</artifactId>
+			</plugin>
+
+			<plugin>
+				<groupId>com.google.cloud.tools</groupId>
+				<artifactId>jib-maven-plugin</artifactId>
+				<version>${jib-maven-plugin.version}</version>
+				<configuration>
+					<from>
+						<!--<image>eclipse-temurin:21-jre@sha256:02df6e67e0d0ba516810a238629ae194e1d88cd6c75674bc74fc7030763ee0b6</image>-->
+						<!--<image>docker.io/azul/zulu-openjdk-alpine:21-jre-headless-latest@sha256:84e15e926d02f45a5bb733d887e5254916c0f7eb628f1bd7a7e80a40ce5390ec</image>-->
+						<!--<image>docker.io/alpine/java:22-jre@sha256:3dfb1d4b76587b6e19d65424ba8455b8ebeb13001d26e3e139e54bcadc6be75e</image>-->
+						<image>docker.io/ubuntu/jre:21-24.04_stable@sha256:c0c340e1e32f708ea0afbe1f7bccd24a4676dc9505ea2472e9014c6ccb33b8ea</image>
+						<platforms>
+							<platform>
+								<architecture>amd64</architecture>
+								<os>linux</os>
+							</platform>
+						</platforms>
+					</from>
+					<to>
+						<image>hello-docker:jib</image>
+					</to>
+					<container>
+						<mainClass>com.buzzcosm.demo.docker.HelloDockerApplication</mainClass>
+						<ports>
+							<port>8080</port>
+						</ports>
+						<!--
+						<jvmFlags>
+							<jvmFlag>-Xms256m</jvmFlag>
+							<jvmFlag>-Xmx512m</jvmFlag>
+						</jvmFlags>
+						-->
+						<jvmFlags>
+							<jvmFlag>-Duser.timezone=America/Montreal</jvmFlag>
+							<jvmFlag>-XX:MetaspaceSize=96m </jvmFlag>
+							<jvmFlag>-XX:MaxMetaspaceSize=256m</jvmFlag>
+							<jvmFlag>-Djava.net.preferIPv4Stack=true</jvmFlag>
+							<jvmFlag>-Xss228k</jvmFlag>
+							<jvmFlag>-XX:+HeapDumpOnOutOfMemoryError</jvmFlag>
+							<jvmFlag>-XX:HeapDumpPath=/tmp</jvmFlag>
+						</jvmFlags>
+					</container>
+				</configuration>
 			</plugin>
 
 			<plugin>
